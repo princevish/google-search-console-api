@@ -13,12 +13,11 @@ declare global {
 
 const auth = new searchConsole.auth.GoogleAuth({
   credentials: {
-    private_key: process.env.PRIVATE_KEY.replaceAll("\\n", "\n"),
+    private_key: process.env.PRIVATE_KEY.replace(/\\n/g, "\n"),
     client_email: process.env.CLIENT_EMAIL,
   },
   scopes: ["https://www.googleapis.com/auth/webmasters.readonly"],
 });
-
 const client = searchConsole.searchconsole({
   version: "v1",
   auth,
@@ -29,14 +28,13 @@ const fetchData = async () => {
     const response = await client.searchanalytics.query({
       siteUrl: process.env.WEBSITE,
       requestBody: {
-        startDate: "2021-01-01",
-        endDate: "2024-01-31",
-        dimensions: ["page", "query", "device", "country"],
+        startDate: "2024-01-01",
+        endDate: "2024-10-31",
       },
     });
     console.log(JSON.stringify(response.data, null, 6));
   } catch (error) {
-    console.log(error);
+    console.log((error as Error).message);
   }
 };
 
